@@ -108,6 +108,117 @@
       <p class="text-on-surface-variant mt-4">Henüz ürün eklenmemiş.</p>
       <button onclick="showAddForm()" class="mt-6 bg-primary text-on-primary px-8 py-3 font-label uppercase tracking-widest text-xs">İlk Ürünü Ekle</button>
     </div>
+
+    <!-- ═══ SİTE AYARLARI ═══ -->
+    <div class="mt-16 pt-12" style="border-top:1px solid #e8e8e8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <p class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Site Ayarları</p>
+          <h2 class="font-headline text-2xl font-extrabold tracking-tighter text-primary mt-1">Görseller</h2>
+          <p class="text-on-surface-variant text-sm mt-1">Logo, banner ve atölye fotoğraflarını buradan yönetin. PNG, JPEG ve HEIC desteklenir.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="siteImagesGrid">
+
+        <!-- Logo -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Logo</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewLogo">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('logo')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('logo')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Banner (Ana Sayfa Sağ Alan)</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewBanner">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('banner')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('banner')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Atölye 1 -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Atölye 1 — Ham Malzeme</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewAtolye1">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('atolye1')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('atolye1')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Atölye 2 -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Atölye 2 — İşleme</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewAtolye2">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('atolye2')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('atolye2')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Atölye 3 -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Atölye 3 — Birleştirme</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewAtolye3">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('atolye3')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('atolye3')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Atölye 4 -->
+        <div class="bg-surface-container-lowest p-5">
+          <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Atölye 4 — Yağ Finişi</label>
+          <div class="aspect-[3/2] bg-surface-container rounded overflow-hidden mb-3 flex items-center justify-center" id="previewAtolye4">
+            <span class="material-symbols-outlined text-3xl text-outline-variant">image</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="pickSiteImage('atolye4')" class="flex-1 flex items-center justify-center gap-1 border border-dashed border-outline-variant hover:border-secondary px-3 py-2 text-xs font-label text-on-surface-variant hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-base">upload</span> Yükle
+            </button>
+            <button onclick="removeSiteImage('atolye4')" class="px-3 py-2 text-xs text-error hover:bg-error-container transition-colors rounded">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="siteImageInput" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" class="hidden"/>
+    </div>
   </main>
 </div>
 
@@ -242,6 +353,7 @@ function login() {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
         loadProducts();
+        loadSiteConfig();
       } else {
         document.getElementById('loginError').style.display = 'block';
       }
@@ -556,6 +668,90 @@ async function confirmDelete() {
 function showLoading(show, text) {
   document.getElementById('loading').style.display = show ? 'flex' : 'none';
   if (text) document.getElementById('loadingText').textContent = text;
+}
+
+// ─── SITE IMAGES ───
+let siteConfig = {};
+let currentSiteImageKey = null;
+
+function loadSiteConfig() {
+  fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'getConfigAdmin', password: getPassword() }) })
+    .then(r => r.json())
+    .then(cfg => {
+      siteConfig = cfg || {};
+      renderSitePreviews();
+    })
+    .catch(() => {});
+}
+
+function renderSitePreviews() {
+  ['logo','banner','atolye1','atolye2','atolye3','atolye4'].forEach(key => {
+    const el = document.getElementById('preview' + key.charAt(0).toUpperCase() + key.slice(1));
+    if (!el) return;
+    const url = siteConfig[key];
+    if (url) {
+      el.innerHTML = `<img src="${url}" alt="${key}" style="width:100%;height:100%;object-fit:cover"/>`;
+    } else {
+      el.innerHTML = '<span class="material-symbols-outlined text-3xl text-outline-variant">image</span>';
+    }
+  });
+}
+
+function pickSiteImage(key) {
+  currentSiteImageKey = key;
+  document.getElementById('siteImageInput').click();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('siteImageInput').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file || !currentSiteImageKey) return;
+    if (file.size > 10 * 1024 * 1024) { toast('Dosya 10MB\'dan büyük olamaz', 'error'); return; }
+
+    showLoading(true, 'Görsel yükleniyor...');
+    try {
+      const base64 = await readFileAsDataURL(file);
+      const resp = await fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'uploadFile', password: getPassword(), fileData: base64, fileName: file.name, fileType: 'image' })
+      });
+      const result = await resp.json();
+      if (result.error) { showLoading(false); toast('Yükleme hatası: ' + result.error, 'error'); return; }
+
+      // Config'e kaydet
+      siteConfig[currentSiteImageKey] = result.url;
+      const saveResp = await fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'saveConfig', password: getPassword(), config: { [currentSiteImageKey]: result.url } })
+      });
+      const saveResult = await saveResp.json();
+      showLoading(false);
+      if (saveResult.error) { toast('Kaydetme hatası: ' + saveResult.error, 'error'); return; }
+      toast('Görsel güncellendi', 'success');
+      renderSitePreviews();
+    } catch (err) {
+      showLoading(false);
+      toast('Hata: ' + err.message, 'error');
+    }
+  });
+});
+
+async function removeSiteImage(key) {
+  if (!siteConfig[key]) { toast('Zaten görsel yok', 'error'); return; }
+  showLoading(true, 'Siliniyor...');
+  try {
+    siteConfig[key] = '';
+    const resp = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'saveConfig', password: getPassword(), config: { [key]: '' } })
+    });
+    const result = await resp.json();
+    showLoading(false);
+    if (result.error) { toast('Hata: ' + result.error, 'error'); return; }
+    toast('Görsel kaldırıldı', 'success');
+    renderSitePreviews();
+  } catch (err) { showLoading(false); toast('Hata: ' + err.message, 'error'); }
 }
 
 function toast(msg, type) {

@@ -235,7 +235,7 @@ let WHATSAPP='905354654495';
 
 <!-- NAV -->
 <nav>
-  <div class="logo" onclick="showCatalog()"><img src="logo.png" alt="Keskeen Design" style="height:40px;display:inline-block;vertical-align:middle;margin-right:8px"/>KESKEEN</div>
+  <div class="logo" onclick="showCatalog()"><img id="siteLogo" src="" alt="Keskeen" style="height:36px;display:none;vertical-align:middle;margin-right:8px"/>KESKEEN</div>
   <div class="nav-links">
     <a onclick="showCatalog();go('shop')">Koleksiyon</a>
     <a onclick="showCatalog();go('story')">Atölye</a>
@@ -261,7 +261,7 @@ let WHATSAPP='905354654495';
     </div>
   </div>
   <div class="hero-r">
-    <img id="heroBanner" class="hero-banner-img" src="banner.jpg" alt="Banner" style=""/>
+    <img id="heroBanner" class="hero-banner-img" src="" alt="Banner" style="display:none"/>
     <div class="hero-bg-txt">AHŞAP</div>
   </div>
 </section>
@@ -310,10 +310,10 @@ let WHATSAPP='905354654495';
     </div>
   </div>
   <div class="story-r">
-    <div class="s-panel"><img src="atolye1.jpg" alt="Ham Malzeme" style="width:100%;height:100%;object-fit:cover;opacity:.7"/><div class="s-panel-lbl">Ham Malzeme</div></div>
-    <div class="s-panel"><img src="atolye2.jpg" alt="İşleme" style="width:100%;height:100%;object-fit:cover;opacity:.7"/><div class="s-panel-lbl">İşleme</div></div>
-    <div class="s-panel"><img src="atolye3.jpg" alt="Birleştirme" style="width:100%;height:100%;object-fit:cover;opacity:.7"/><div class="s-panel-lbl">Birleştirme</div></div>
-    <div class="s-panel"><img src="atolye4.jpg" alt="Yağ Finişi" style="width:100%;height:100%;object-fit:cover;opacity:.7"/><div class="s-panel-lbl">Yağ Finişi</div></div>
+    <div class="s-panel"><img id="atolye1" src="" alt="Ham Malzeme" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8;display:none"/><span class="s-panel-ico">🪵</span><div class="s-panel-lbl">Ham Malzeme</div></div>
+    <div class="s-panel"><img id="atolye2" src="" alt="İşleme" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8;display:none"/><span class="s-panel-ico">🔨</span><div class="s-panel-lbl">İşleme</div></div>
+    <div class="s-panel"><img id="atolye3" src="" alt="Birleştirme" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8;display:none"/><span class="s-panel-ico">✦</span><div class="s-panel-lbl">Birleştirme</div></div>
+    <div class="s-panel"><img id="atolye4" src="" alt="Yağ Finişi" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.8;display:none"/><span class="s-panel-ico">🛢️</span><div class="s-panel-lbl">Yağ Finişi</div></div>
   </div>
 </section>
 
@@ -335,7 +335,7 @@ let WHATSAPP='905354654495';
 
 <footer>
   <div>
-    <div class="f-brand"><img src="logo.png" alt="Keskeen" style="height:32px;margin-bottom:8px;filter:brightness(0) invert(1)"/>KESKEEN</div>
+    <div class="f-brand"><img id="footerLogo" src="" alt="Keskeen" style="height:32px;margin-bottom:8px;filter:brightness(0) invert(1);display:none"/>KESKEEN</div>
     <p class="f-tagline">El Yapımı Ahşap Tasarımlar.<br/>Doğanın zarafeti, usta ellerde.</p>
   </div>
   <div>
@@ -443,7 +443,18 @@ function filterByName(cat){
 // LOAD
 window.addEventListener('DOMContentLoaded',()=>{
   fetch(GAS_URL+'?action=getConfig').then(r=>r.json())
-    .then(c=>{if(c.whatsapp)WHATSAPP=c.whatsapp;setWa();}).catch(()=>setWa());
+    .then(c=>{
+      if(c.whatsapp)WHATSAPP=c.whatsapp;setWa();
+      // Site görselleri
+      if(c.logo){
+        const el=document.getElementById('siteLogo');if(el){el.src=c.logo;el.style.display='inline-block';}
+        const fl=document.getElementById('footerLogo');if(fl){fl.src=c.logo;fl.style.display='block';}
+      }
+      if(c.banner){const el=document.getElementById('heroBanner');if(el){el.src=c.banner;el.style.display='block';}}
+      ['atolye1','atolye2','atolye3','atolye4'].forEach(k=>{
+        if(c[k]){const el=document.getElementById(k);if(el){el.src=c[k];el.style.display='block';}}
+      });
+    }).catch(()=>setWa());
 
   fetch(GAS_URL+'?action=getProducts').then(r=>r.json())
     .then(d=>{
