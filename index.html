@@ -546,7 +546,8 @@ function renderDetail(p){
 
   const specs=document.getElementById('dSpecs');
   specs.innerHTML='';
-  [['Malzeme',p.malzeme],['Boyut',p.boyut],['Kategori',p.kategori]].forEach(([k,v])=>{
+  [['Malzeme',p.malzeme],
+   ['Boyut',p.boyut],['Kategori',p.kategori]].forEach(([k,v])=>{
     if(!v)return;
     specs.innerHTML+=`<div class="d-spec"><span class="d-spec-lbl">${k}</span><span class="d-spec-val">${v}</span></div>`;
   });
