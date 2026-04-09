@@ -261,7 +261,7 @@ let WHATSAPP='905354654495';
     </div>
   </div>
   <div class="hero-r">
-    <img id="heroBanner" class="hero-banner-img" src="" alt="Banner" style="display:none"/>
+    <img id="heroBanner" class="hero-banner-img" src="banner.jpg" alt="Banner" style=""/>
     <div class="hero-bg-txt">AHŞAP</div>
   </div>
 </section>
@@ -494,7 +494,7 @@ function cardHTML(p){
   const thumb=imgs[idx]||'';
   const waLink=wa('Merhaba, '+p.ad+' hakkında bilgi almak istiyorum.');
   const pd=sj(p);
-  return`<div class="pcard" id="pc-${p.id}" onclick="openP(${pd})">
+  return`<div class="pcard" id="pc-${p.id}" onclick="openP('${p.id}')">
     <div class="card-media">
       ${thumb?`<img src="${thumb}" alt="${p.ad}" loading="lazy"/>`:'<div class="card-empty">✦</div>'}
       <div class="card-overlay"><div class="overlay-icon">→</div></div>
@@ -537,7 +537,7 @@ function cSet(pid,i){
 }
 
 // DETAIL
-function openP(p){showDetail(p);}
+function openP(id){const p=allP.find(x=>x.id===id);if(p)showDetail(p);}
 
 function renderDetail(p){
   document.getElementById('dCat').textContent=p.kategori||'';
@@ -565,7 +565,7 @@ function renderDetail(p){
     rt.style.display='block';
     rg.innerHTML=others.map(o=>{
       const th=(o.resimler&&o.resimler.length)?o.resimler[0]:'';
-      return`<div class="pcard" onclick="openP(${sj(o)})">
+      return`<div class="pcard" onclick="openP('${o.id}')">
         <div class="card-media" style="aspect-ratio:3/4">
           ${th?`<img src="${th}" alt="${o.ad}" loading="lazy"/>`:'<div class="card-empty">✦</div>'}
           <div class="card-overlay"><div class="overlay-icon">→</div></div>
