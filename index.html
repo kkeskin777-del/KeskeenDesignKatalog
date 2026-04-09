@@ -1,524 +1,602 @@
 <!DOCTYPE html>
-<html class="light" lang="tr">
+<html lang="tr">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>KESKEEN | El Yapımı Ahşap Tasarımlar</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "tertiary-fixed": "#ffdbcc", "on-surface": "#1a1c1c", "on-primary": "#ffffff",
-          "surface-bright": "#f9f9f9", "on-tertiary-fixed": "#2d1509",
-          "inverse-surface": "#2f3131", "inverse-primary": "#bdc7d9",
-          "on-tertiary-fixed-variant": "#5f3f30", "primary-container": "#202a38",
-          "on-error": "#ffffff", "on-error-container": "#93000a",
-          "secondary": "#7f5440", "primary-fixed": "#d9e3f6",
-          "surface-container-lowest": "#ffffff", "primary-fixed-dim": "#bdc7d9",
-          "secondary-fixed": "#ffdbcc", "secondary-fixed-dim": "#f2baa1",
-          "on-primary-fixed": "#121c2a", "on-primary-fixed-variant": "#3d4756",
-          "tertiary-container": "#3e2316", "inverse-on-surface": "#f1f1f1",
-          "primary": "#0b1623", "on-primary-container": "#8791a2",
-          "on-tertiary-container": "#b18876", "surface-variant": "#e2e2e2",
-          "on-secondary": "#ffffff", "on-secondary-fixed": "#301305",
-          "on-secondary-fixed-variant": "#643d2a", "tertiary": "#260f04",
-          "tertiary-fixed-dim": "#eabda9", "surface-container-high": "#e8e8e8",
-          "surface-tint": "#555f6f", "on-background": "#1a1c1c", "background": "#f9f9f9",
-          "surface-container-highest": "#e2e2e2", "error": "#ba1a1a",
-          "surface-container": "#eeeeee", "surface-container-low": "#f3f3f3",
-          "surface-dim": "#dadada", "secondary-container": "#fec5ac",
-          "on-secondary-container": "#79503c", "surface": "#f9f9f9",
-          "on-tertiary": "#ffffff", "outline": "#75777c", "outline-variant": "#c5c6cc",
-          "on-surface-variant": "#44474c", "error-container": "#ffdad6"
-        },
-        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-        fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] }
-      }
-    }
-  }
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
-  .no-line { border: none !important; }
-  .tonal-transition { transition: background-color 0.3s ease; }
-  .product-card .wa-link { opacity: 0; transition: opacity 0.3s ease; }
-  .product-card:hover .wa-link { opacity: 1; }
-  @media (max-width: 767px) { .product-card .wa-link { opacity: 1; } }
-  .skeleton { background: linear-gradient(90deg, #eeeeee 25%, #e2e2e2 50%, #eeeeee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-  @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
-  html { scroll-behavior: smooth; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#141210;--ink-muted:#6b6560;--ink-faint:#b5b0aa;
+  --cream:#f7f4ef;--cream-dk:#ede9e2;
+  --warm:#c8a97e;--warm-dk:#9e7c52;--white:#ffffff;
+  --ff-head:'Playfair Display',Georgia,serif;
+  --ff-body:'DM Sans',sans-serif;
+  --ff-mono:'DM Mono',monospace;
+  --nav-h:72px;
+  --ease:.25s cubic-bezier(.25,.46,.45,.94);
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--ff-body);font-size:15px;line-height:1.6;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{border:none;background:none;cursor:pointer;font-family:inherit}
 
-  /* ── Ürün Detay Sayfası ── */
-  #detailPage { display:none; }
-  .thumb-strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:thin; }
-  .thumb-strip::-webkit-scrollbar { height:4px; }
-  .thumb-strip::-webkit-scrollbar-track { background:#f0f0f0; }
-  .thumb-strip::-webkit-scrollbar-thumb { background:#ccc; border-radius:2px; }
-  .thumb-item { width:72px; height:72px; flex-shrink:0; overflow:hidden; border-radius:4px; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s; }
-  .thumb-item.active { border-color:#0b1623; }
-  .thumb-item img { width:100%;height:100%;object-fit:cover; }
-  .thumb-item.is-video { display:flex;align-items:center;justify-content:center;background:#e8e8e8; }
-  .main-media-wrap { position:relative; aspect-ratio:4/5; background:#eeeeee; border-radius:4px; overflow:hidden; }
-  .main-media-wrap img { width:100%;height:100%;object-fit:cover; transition:opacity 0.3s; }
-  .main-media-wrap iframe { width:100%;height:100%;border:none; }
-  .fade-in { animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(247,244,239,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(200,169,126,.15)}
+.logo{font-family:var(--ff-head);font-size:22px;font-weight:900;letter-spacing:.08em;cursor:pointer}
+.nav-links{display:flex;gap:36px}
+.nav-links a{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted);transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:var(--ink)}
+.nav-wa{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--warm-dk);border:1px solid var(--warm);padding:8px 18px;transition:all .2s}
+.nav-wa:hover{background:var(--warm-dk);color:#fff;border-color:var(--warm-dk)}
+.nav-wa svg{width:15px;height:15px}
 
-  /* Detail nav arrow buttons */
-  .media-nav { position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;background:rgba(255,255,255,0.85);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:2px;transition:background 0.2s;z-index:10; }
-  .media-nav:hover { background:white; }
+/* HERO */
+.hero{min-height:100vh;padding-top:var(--nav-h);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-l{display:flex;flex-direction:column;justify-content:center;padding:80px 60px 80px 80px}
+.eyebrow{font-family:var(--ff-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--warm-dk);display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--warm)}
+.hero-title{font-family:var(--ff-head);font-size:clamp(52px,5.5vw,88px);font-weight:900;line-height:1;color:var(--ink);margin-bottom:28px}
+.hero-title em{font-style:italic;color:var(--warm-dk)}
+.hero-desc{font-size:16px;color:var(--ink-muted);max-width:360px;line-height:1.75;margin-bottom:48px;font-weight:300}
+.hero-actions{display:flex;gap:16px;align-items:center}
+.btn-primary{background:var(--ink);color:#fff;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:16px 36px;transition:background .2s;cursor:pointer}
+.btn-primary:hover{background:var(--warm-dk)}
+.btn-ghost{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--ink-faint);padding-bottom:2px;transition:color .2s,border-color .2s}
+.btn-ghost:hover{color:var(--ink);border-color:var(--ink)}
+.hero-r{position:relative;background:var(--cream-dk);overflow:hidden}
+.hero-r::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--cream) 0%,transparent 20%);pointer-events:none;z-index:2}
+.hero-bg-txt{position:absolute;bottom:-30px;right:-20px;font-family:var(--ff-head);font-size:220px;font-weight:900;color:rgba(200,169,126,.06);line-height:1;user-select:none;z-index:1;white-space:nowrap}
+.hero-badge{position:absolute;bottom:48px;left:48px;z-index:3;background:var(--ink);color:#fff;padding:22px 26px}
+.hero-badge-num{font-family:var(--ff-head);font-size:40px;font-weight:700;color:var(--warm)}
+.hero-badge-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:4px}
+
+/* SHOP */
+#shop{padding:80px 48px;max-width:1440px;margin:0 auto}
+.shop-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:48px;padding-bottom:20px;border-bottom:1px solid var(--cream-dk)}
+.shop-title{font-family:var(--ff-head);font-size:44px;font-weight:700}
+.shop-count{font-family:var(--ff-mono);font-size:12px;color:var(--ink-muted)}
+.shop-layout{display:grid;grid-template-columns:220px 1fr;gap:56px;align-items:start}
+
+/* FILTER */
+.filter-sidebar{position:sticky;top:calc(var(--nav-h) + 24px)}
+.filter-lbl{font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px}
+.filter-list{list-style:none}
+.filter-list li{margin-bottom:2px}
+.filter-btn{width:100%;text-align:left;font-size:14px;color:var(--ink-muted);padding:10px 14px;transition:all .2s;border-left:2px solid transparent}
+.filter-btn:hover{color:var(--ink);background:var(--cream-dk);border-left-color:var(--warm)}
+.filter-btn.active{color:var(--ink);font-weight:600;background:var(--cream-dk);border-left-color:var(--warm-dk)}
+.filter-btn .ct{font-family:var(--ff-mono);font-size:10px;color:var(--ink-faint);margin-left:5px}
+
+/* GRID */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px}
+.pcard{cursor:pointer;transition:transform .4s .25s cubic-bezier(.25,.46,.45,.94)}
+.pcard:hover{transform:translateY(-4px)}
+.card-media{position:relative;overflow:hidden;background:var(--cream-dk);aspect-ratio:3/4}
+.card-media img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.pcard:hover .card-media img{transform:scale(1.06)}
+.card-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:32px}
+.card-overlay{position:absolute;inset:0;background:rgba(20,18,16,0);z-index:3;transition:background .35s;display:flex;align-items:center;justify-content:center}
+.pcard:hover .card-overlay{background:rgba(20,18,16,.06)}
+.overlay-icon{width:50px;height:50px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;transform:scale(0);transition:transform .3s cubic-bezier(.25,.46,.45,.94)}
+.pcard:hover .overlay-icon{transform:scale(1)}
+.media-badge{position:absolute;top:12px;right:12px;z-index:4;background:rgba(20,18,16,.55);color:#fff;font-family:var(--ff-mono);font-size:10px;padding:3px 8px;backdrop-filter:blur(4px)}
+.video-badge{position:absolute;top:12px;left:12px;z-index:4;background:var(--warm-dk);color:#fff;font-family:var(--ff-mono);font-size:9px;padding:3px 8px;letter-spacing:.1em}
+.card-nav{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;background:rgba(255,255,255,.88);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;z-index:5;font-size:18px;color:var(--ink)}
+.card-nav.prev{left:8px}
+.card-nav.next{right:8px}
+.pcard:hover .card-nav{opacity:1}
+.card-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.cdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.45);transition:all .2s;cursor:pointer}
+.cdot.active{background:#fff;transform:scale(1.3)}
+.card-wa{position:absolute;bottom:0;left:0;right:0;z-index:5;background:var(--ink);color:#fff;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;transform:translateY(100%);transition:transform .3s cubic-bezier(.25,.46,.45,.94)}
+.pcard:hover .card-wa{transform:translateY(0)}
+.card-wa svg{width:14px;height:14px;fill:#25D366}
+.card-info{padding:14px 2px 4px}
+.card-cat{font-family:var(--ff-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--warm-dk);margin-bottom:5px}
+.card-name{font-family:var(--ff-head);font-size:20px;font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:5px}
+.card-meta{font-size:12px;color:var(--ink-muted)}
+
+/* SKELETON */
+.skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px}
+.skel-card .skel-img{aspect-ratio:3/4;background:linear-gradient(90deg,#ede9e2 25%,#e4dfd7 50%,#ede9e2 75%);background-size:200% 100%;animation:shim 1.5s infinite}
+.skel-card .skel-ln{height:13px;border-radius:2px;margin-top:14px;background:linear-gradient(90deg,#ede9e2 25%,#e4dfd7 50%,#ede9e2 75%);background-size:200% 100%;animation:shim 1.5s infinite}
+.skel-card .skel-ln.s60{width:60%;margin-top:7px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* STORY */
+#story{background:var(--ink);color:#fff;display:grid;grid-template-columns:1fr 1fr;min-height:60vh}
+.story-l{padding:80px;display:flex;flex-direction:column;justify-content:center}
+.s-eye{font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--warm);margin-bottom:20px}
+.s-title{font-family:var(--ff-head);font-size:44px;font-weight:700;line-height:1.1;margin-bottom:20px}
+.s-title em{color:var(--warm);font-style:italic}
+.s-body{font-size:15px;color:rgba(255,255,255,.6);line-height:1.8;font-weight:300;max-width:440px;margin-bottom:36px}
+.s-pills{display:flex;flex-wrap:wrap;gap:10px}
+.s-pill{border:1px solid rgba(200,169,126,.3);color:var(--warm);font-family:var(--ff-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px}
+.story-r{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px}
+.s-panel{background:rgba(255,255,255,.04);position:relative;min-height:180px;display:flex;align-items:center;justify-content:center}
+.s-panel:nth-child(1){background:rgba(200,169,126,.08)}
+.s-panel:nth-child(3){background:rgba(200,169,126,.12)}
+.s-panel-ico{font-size:40px;opacity:.15}
+.s-panel-lbl{position:absolute;bottom:16px;left:16px;font-family:var(--ff-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,169,126,.5)}
+
+/* CTA */
+#contact{background:var(--cream-dk);padding:100px 48px;text-align:center}
+.cta-sup{font-family:var(--ff-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--warm-dk);margin-bottom:18px}
+.cta-title{font-family:var(--ff-head);font-size:clamp(36px,4vw,60px);font-weight:900;color:var(--ink);margin-bottom:14px;line-height:1.1}
+.cta-title em{font-style:italic;color:var(--warm-dk)}
+.cta-sub{font-size:16px;color:var(--ink-muted);max-width:380px;margin:0 auto 40px;font-weight:300}
+.cta-wa{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:18px 40px;transition:background .2s}
+.cta-wa:hover{background:var(--warm-dk)}
+.cta-wa svg{width:18px;height:18px}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.4);display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding:64px 80px 40px}
+.f-brand{font-family:var(--ff-head);font-size:20px;font-weight:900;color:#fff;margin-bottom:12px}
+.f-tagline{font-size:13px;line-height:1.6;font-weight:300}
+.f-col-title{font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--warm);margin-bottom:14px}
+.f-link{display:block;font-size:13px;color:rgba(255,255,255,.5);padding:4px 0;cursor:pointer;transition:color .2s}
+.f-link:hover{color:#fff}
+.f-bottom{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.06);margin-top:16px;padding-top:16px;font-family:var(--ff-mono);font-size:10px;letter-spacing:.1em}
+
+/* DETAIL PAGE */
+#detailPage{display:none;min-height:100vh;padding-top:var(--nav-h)}
+.detail-wrap{max-width:1200px;margin:0 auto;padding:48px 48px 80px}
+.d-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:40px;transition:color .2s;cursor:pointer}
+.d-back:hover{color:var(--ink)}
+.d-back svg{width:16px;height:16px}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+
+/* Detail media */
+.d-media{position:sticky;top:calc(var(--nav-h) + 20px)}
+.d-main{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--cream-dk);margin-bottom:12px}
+.d-main img{width:100%;height:100%;object-fit:cover;transition:opacity .3s}
+.d-main iframe{width:100%;height:100%;border:none}
+.d-main-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:56px;color:var(--ink-faint)}
+.d-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;background:rgba(247,244,239,.9);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--ink);transition:background .2s;z-index:5}
+.d-nav:hover{background:#fff}
+.d-prev{left:12px}
+.d-next{right:12px}
+.d-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.d-thumbs::-webkit-scrollbar{height:3px}
+.d-thumbs::-webkit-scrollbar-track{background:var(--cream-dk)}
+.d-thumbs::-webkit-scrollbar-thumb{background:var(--warm)}
+.d-thumb{width:72px;height:72px;flex-shrink:0;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:border-color .2s;background:var(--cream-dk);display:flex;align-items:center;justify-content:center}
+.d-thumb img{width:100%;height:100%;object-fit:cover}
+.d-thumb.active{border-color:var(--warm-dk)}
+.d-thumb-vid{font-size:22px;color:var(--ink-faint)}
+
+/* Detail info */
+.d-info{padding-top:8px}
+.d-cat{font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--warm-dk);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.d-cat::before{content:'';width:22px;height:1px;background:var(--warm)}
+.d-name{font-family:var(--ff-head);font-size:clamp(32px,3.5vw,52px);font-weight:900;line-height:1.05;color:var(--ink);margin-bottom:20px}
+.d-desc{font-size:15px;color:var(--ink-muted);line-height:1.8;font-weight:300;margin-bottom:32px;max-width:420px}
+.d-specs{margin-bottom:36px;border-top:1px solid var(--cream-dk)}
+.d-spec{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--cream-dk)}
+.d-spec-lbl{font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+.d-spec-val{font-size:14px;font-weight:500;color:var(--ink)}
+.d-wa{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--ink);color:#fff;width:100%;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:18px 32px;transition:background .2s;margin-bottom:10px}
+.d-wa:hover{background:var(--warm-dk)}
+.d-wa svg{width:18px;height:18px}
+.d-wa-note{font-size:11px;color:var(--ink-faint);text-align:center}
+
+/* Related */
+.related{max-width:1200px;margin:0 auto;padding:0 48px 80px}
+.rel-title{font-family:var(--ff-head);font-size:28px;font-weight:700;margin-bottom:28px;padding-top:48px;border-top:1px solid var(--cream-dk)}
+.rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+
+/* EMPTY */
+.empty{text-align:center;padding:80px 20px;color:var(--ink-muted)}
+.empty-icon{font-size:44px;margin-bottom:14px;opacity:.25}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:14px 22px;animation:tin .3s cubic-bezier(.25,.46,.45,.94)}
+.toast-err{background:#a93226}
+@keyframes tin{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* FADE */
+.fi{animation:fi .35s cubic-bezier(.25,.46,.45,.94)}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* MOBILE */
+@media(max-width:960px){
+  nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-r{display:none}
+  .hero-l{padding:60px 24px}
+  #shop{padding:48px 20px}
+  .shop-layout{grid-template-columns:1fr}
+  .filter-sidebar{position:static}
+  .filter-list{display:flex;flex-wrap:wrap;gap:6px}
+  .filter-list li{margin:0}
+  .filter-btn{border-left:none;border:1px solid var(--cream-dk);padding:6px 12px;font-size:13px}
+  .filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .d-grid{grid-template-columns:1fr}
+  .d-media{position:static}
+  .detail-wrap{padding:24px 20px 60px}
+  #story{grid-template-columns:1fr}
+  .story-r{display:none}
+  .story-l{padding:60px 24px}
+  footer{grid-template-columns:1fr 1fr;padding:48px 24px 32px}
+  .rel-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-secondary/30">
-
+<body>
 <script>
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzauh8tMMDfbpVSXDqqI4DbhS6poEDgL3Guz0rXawOyQkCDE_-flknVkT4aXN2CCwGGXw/exec';
-  let WHATSAPP = '905354654495';
+const GAS_URL='https://script.google.com/macros/s/AKfycbzauh8tMMDfbpVSXDqqI4DbhS6poEDgL3Guz0rXawOyQkCDE_-flknVkT4aXN2CCwGGXw/exec';
+let WHATSAPP='905354654495';
 </script>
 
-<!-- ═══ NAV ═══ -->
-<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl flex justify-between items-center px-8 py-6 max-w-full no-line tonal-transition">
-  <div class="text-2xl font-bold tracking-tighter text-slate-900 font-headline cursor-pointer" onclick="showCatalog()">KESKEEN</div>
-  <div class="hidden md:flex items-center space-x-12">
-    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300 cursor-pointer" onclick="showCatalog(); setTimeout(()=>scrollTo('#katalog'),300)">Katalog</a>
-    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300" href="#hikaye" onclick="showCatalog()">Hikâye</a>
-    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300" href="#iletisim" onclick="showCatalog()">İletişim</a>
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="showCatalog()">KESKEEN</div>
+  <div class="nav-links">
+    <a onclick="showCatalog();go('shop')">Koleksiyon</a>
+    <a onclick="showCatalog();go('story')">Atölye</a>
+    <a onclick="showCatalog();go('contact')">İletişim</a>
   </div>
-  <div class="flex items-center space-x-6 text-slate-900">
-    <a id="navWhatsapp" href="#" target="_blank" rel="noopener" class="hover:scale-95 transition-transform duration-200">
-      <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-    <button class="md:hidden" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
-  </div>
+  <a id="navWa" href="#" target="_blank" rel="noopener" class="nav-wa">
+    <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp
+  </a>
 </nav>
 
-<!-- Mobile Menu -->
-<div id="mobileMenu" class="hidden fixed top-[72px] left-0 right-0 z-40 bg-white/95 backdrop-blur-xl px-8 py-6 space-y-4 md:hidden">
-  <a class="block font-headline tracking-tight text-slate-900 text-lg cursor-pointer" onclick="showCatalog();this.closest('#mobileMenu').classList.add('hidden')">Katalog</a>
-  <a class="block font-headline tracking-tight text-slate-900 text-lg" href="#hikaye" onclick="showCatalog();this.closest('#mobileMenu').classList.add('hidden')">Hikâye</a>
-  <a class="block font-headline tracking-tight text-slate-900 text-lg" href="#iletisim" onclick="showCatalog();this.closest('#mobileMenu').classList.add('hidden')">İletişim</a>
+<!-- KATALOG SAYFASI -->
+<div id="catalogPage">
+
+<section class="hero">
+  <div class="hero-l">
+    <div class="eyebrow">El Yapımı Ahşap Tasarımlar</div>
+    <h1 class="hero-title">Doğanın<br/><em>Zarafeti.</em></h1>
+    <p class="hero-desc">Seçkin sert ağaçlardan geleneksel ustalıkla şekillenen, ömür boyu sürecek tasarımlar.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="go('shop')">Koleksiyonu Gör</button>
+      <a id="heroCta" href="#" target="_blank" rel="noopener" class="btn-ghost">Bize Yazın</a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-bg-txt">AHŞAP</div>
+    <div class="hero-badge">
+      <div class="hero-badge-num" id="heroCount">—</div>
+      <div class="hero-badge-lbl">El Yapımı<br/>Ürün</div>
+    </div>
+  </div>
+</section>
+
+<section id="shop">
+  <div class="shop-hdr">
+    <h2 class="shop-title">Koleksiyon</h2>
+    <span class="shop-count" id="shopCount"></span>
+  </div>
+  <div class="shop-layout">
+    <aside class="filter-sidebar">
+      <div class="filter-lbl">Kategoriler</div>
+      <ul class="filter-list" id="filterList">
+        <li><button class="filter-btn active" data-cat="" onclick="filterBy(this)">Tümü <span class="ct" id="cntAll"></span></button></li>
+        <li><button class="filter-btn" data-cat="Sehpalar" onclick="filterBy(this)">Sehpalar <span class="ct" id="cntSehpalar"></span></button></li>
+        <li><button class="filter-btn" data-cat="Masalar" onclick="filterBy(this)">Masalar <span class="ct" id="cntMasalar"></span></button></li>
+        <li><button class="filter-btn" data-cat="Dekorasyon" onclick="filterBy(this)">Dekorasyon <span class="ct" id="cntDekorasyon"></span></button></li>
+        <li><button class="filter-btn" data-cat="Mutfak" onclick="filterBy(this)">Mutfak <span class="ct" id="cntMutfak"></span></button></li>
+        <li><button class="filter-btn" data-cat="Diğer" onclick="filterBy(this)">Diğer <span class="ct" id="cntDiger"></span></button></li>
+      </ul>
+    </aside>
+    <div>
+      <div class="skel-grid" id="skelGrid">
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-ln"></div><div class="skel-ln s60"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-ln"></div><div class="skel-ln s60"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-ln"></div><div class="skel-ln s60"></div></div>
+        <div class="skel-card"><div class="skel-img"></div><div class="skel-ln"></div><div class="skel-ln s60"></div></div>
+      </div>
+      <div class="pgrid" id="pgrid" style="display:none;"></div>
+      <div class="empty" id="emptyState" style="display:none;"><div class="empty-icon">✦</div><p>Bu kategoride ürün bulunamadı.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="story-l">
+    <div class="s-eye">Atölyemiz</div>
+    <h2 class="s-title">Her Parçada<br/><em>Bir Hikâye</em></h2>
+    <p class="s-body">Her parça, sürdürülebilir kaynaklardan temin edilen masif ağaçlarla, el işçiliğiyle üretilir. Geleneksel birleştirme teknikleri ve doğal yağ finişi — ömür boyu dayanıklılık.</p>
+    <div class="s-pills">
+      <span class="s-pill">Masif Ceviz</span>
+      <span class="s-pill">Masif Meşe</span>
+      <span class="s-pill">Doğal Yağ Finişi</span>
+      <span class="s-pill">Özel Sipariş</span>
+    </div>
+  </div>
+  <div class="story-r">
+    <div class="s-panel"><span class="s-panel-ico">🪵</span><div class="s-panel-lbl">Ham Malzeme</div></div>
+    <div class="s-panel"><span class="s-panel-ico">🔨</span><div class="s-panel-lbl">İşleme</div></div>
+    <div class="s-panel"><span class="s-panel-ico">✦</span><div class="s-panel-lbl">Birleştirme</div></div>
+    <div class="s-panel"><span class="s-panel-ico">🛢️</span><div class="s-panel-lbl">Yağ Finişi</div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="cta-sup">Özel Sipariş</div>
+  <h2 class="cta-title">Hayal ettiğiniz<br/><em>tasarımı yapalım.</em></h2>
+  <p class="cta-sub">Ölçü, malzeme ve tasarım tercihinizi paylaşın, birlikte çalışalım.</p>
+  <a id="ctaWa" href="#" target="_blank" rel="noopener" class="cta-wa">
+    <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp'tan Yazın
+  </a>
+</section>
+
+<footer>
+  <div>
+    <div class="f-brand">KESKEEN</div>
+    <p class="f-tagline">El Yapımı Ahşap Tasarımlar.<br/>Doğanın zarafeti, usta ellerde.</p>
+  </div>
+  <div>
+    <div class="f-col-title">Koleksiyon</div>
+    <a class="f-link" onclick="showCatalog();go('shop')">Tüm Ürünler</a>
+    <a class="f-link" onclick="filterByName('Masalar');showCatalog();go('shop')">Masalar</a>
+    <a class="f-link" onclick="filterByName('Sehpalar');showCatalog();go('shop')">Sehpalar</a>
+  </div>
+  <div>
+    <div class="f-col-title">Bilgi</div>
+    <a class="f-link" onclick="showCatalog();go('story')">Atölyemiz</a>
+    <a class="f-link" onclick="showCatalog();go('contact')">İletişim</a>
+  </div>
+  <div>
+    <div class="f-col-title">Sosyal</div>
+    <a class="f-link" href="#">Instagram</a>
+    <a class="f-link" href="#">Etsy</a>
+  </div>
+  <div class="f-bottom">© 2026 KESKEEN — El Yapımı Ahşap Tasarımlar</div>
+</footer>
 </div>
 
-<!-- ═══ KATALOG / ANA SAYFA ═══ -->
-<div id="catalogPage">
-<main>
-
-<!-- HERO -->
-<section class="relative h-screen flex items-center pt-20 overflow-hidden bg-surface">
-  <div class="absolute inset-0 z-0 flex items-center justify-end">
-    <div class="w-full md:w-3/4 h-[90%] bg-surface-container-highest relative">
-      <div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/40 to-transparent"></div>
-    </div>
-  </div>
-  <div class="relative z-10 max-w-7xl mx-auto px-8 w-full">
-    <p class="font-label text-xs uppercase tracking-[0.2em] text-secondary mb-6">El Yapımı Ahşap Tasarımlar</p>
-    <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-primary leading-[0.95]">Doğanın<br/>Zarafeti.</h1>
-    <p class="text-on-surface-variant text-lg mt-8 max-w-md leading-relaxed font-light">Seçkin sert ağaçlardan geleneksel ustalıkla şekillenen, zamansız tasarımlar.</p>
-    <div class="flex items-center gap-6 mt-12">
-      <a href="#katalog" class="bg-primary text-on-primary px-10 py-4 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300">Kataloğu Gör</a>
-      <a id="heroCta" href="#" target="_blank" rel="noopener" class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors border-b border-on-surface-variant pb-1">Bize Yazın</a>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUCTS -->
-<section id="katalog" class="pt-16 md:pt-24 pb-24 md:pb-32 px-8 lg:px-16 max-w-[1600px] mx-auto">
-  <header class="mb-16 md:mb-24 text-center md:text-left">
-    <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-4">Tüm Ürünler</p>
-    <h2 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-primary">Katalog</h2>
-  </header>
-
-  <div id="skeletonGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-    <div><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
-    <div class="md:mt-12"><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
-    <div><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
-  </div>
-
-  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16" style="display:none;"></div>
-
-  <div id="emptyState" class="text-center py-20" style="display:none;">
-    <span class="material-symbols-outlined text-6xl text-outline-variant">inventory_2</span>
-    <p class="text-on-surface-variant mt-4">Katalog yakında güncellenecek.</p>
-  </div>
-</section>
-
-<!-- ETHOS -->
-<section id="hikaye" class="bg-surface-container-low py-24 md:py-32">
-  <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center gap-20">
-    <div class="flex-1 space-y-8">
-      <h2 class="text-4xl md:text-5xl font-headline font-extrabold text-primary leading-tight tracking-tighter">Her Dokunuşta<br/>Bir Hikâye.</h2>
-      <p class="text-lg text-on-surface-variant leading-relaxed">Atölyemizde her parça, sürdürülebilir kaynaklardan temin edilen masif ağaçlarla el işçiliğiyle üretilir. Geleneksel birleştirme teknikleri ve doğal yağ finişi ile ömür boyu dayanıklılık.</p>
-      <ul class="space-y-4">
-        <li class="flex items-center gap-4 text-primary font-semibold"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Masif Ceviz &amp; Meşe</li>
-        <li class="flex items-center gap-4 text-primary font-semibold"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Geleneksel Birleştirme Teknikleri</li>
-        <li class="flex items-center gap-4 text-primary font-semibold"><span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Doğal Yağ Finişi</li>
-      </ul>
-    </div>
-    <div class="flex-1 grid grid-cols-2 gap-4">
-      <div class="space-y-4">
-        <div class="bg-surface-container h-64 rounded-lg"></div>
-        <div class="bg-surface-container-high h-48 rounded-lg"></div>
-      </div>
-      <div class="pt-12 space-y-4">
-        <div class="bg-surface-container-high h-48 rounded-lg"></div>
-        <div class="bg-surface-container h-64 rounded-lg"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section id="iletisim" class="bg-primary text-white py-20 md:py-28 px-8 text-center space-y-8">
-  <span class="material-symbols-outlined text-4xl text-secondary-fixed-dim" style="font-variation-settings: 'FILL' 1;">architecture</span>
-  <h3 class="font-headline text-3xl md:text-4xl font-extrabold tracking-tighter leading-tight max-w-lg mx-auto">Özel tasarım mı istiyorsunuz?<br/>Birlikte çalışalım.</h3>
-  <p class="text-on-primary-container max-w-xs mx-auto text-sm leading-relaxed">Ölçü, malzeme ve tasarım tercihinizi paylaşın.</p>
-  <div class="pt-4">
-    <a id="ctaWhatsapp" href="#" target="_blank" rel="noopener" class="inline-block bg-white text-primary px-10 py-4 font-label uppercase tracking-widest text-xs hover:bg-surface-container-low transition-colors duration-300">Bize Yazın</a>
-  </div>
-</section>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="w-full bg-slate-100 tonal-transition">
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 max-w-7xl mx-auto font-headline text-sm">
-    <div class="space-y-6">
-      <div class="text-xl font-bold tracking-tighter text-slate-900">KESKEEN</div>
-      <p class="text-slate-500 max-w-xs leading-relaxed">El Yapımı Ahşap Tasarımlar.<br/>Doğanın zarafeti, usta ellerde.</p>
-    </div>
-    <div class="flex flex-col space-y-4">
-      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Katalog</span>
-      <a class="text-slate-500 hover:text-slate-900 transition-opacity cursor-pointer" onclick="showCatalog();setTimeout(()=>scrollTo('#katalog'),300)">Tüm Ürünler</a>
-    </div>
-    <div class="flex flex-col space-y-4">
-      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Bilgi</span>
-      <a class="text-slate-500 hover:text-slate-900 transition-opacity cursor-pointer" onclick="showCatalog()">Hakkımda</a>
-      <a class="text-slate-500 hover:text-slate-900 transition-opacity cursor-pointer" onclick="showCatalog()">İletişim</a>
-    </div>
-    <div class="flex flex-col space-y-4">
-      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Sosyal</span>
-      <a class="text-slate-500 hover:text-slate-900 cursor-pointer" href="#">Instagram</a>
-      <a class="text-slate-500 hover:text-slate-900 cursor-pointer" href="#">Etsy</a>
-    </div>
-  </div>
-  <div class="border-t border-slate-200 px-12 py-8 max-w-7xl mx-auto text-slate-400 text-[10px] uppercase tracking-widest">
-    <span>© 2026 KESKEEN. El Yapımı Ahşap Tasarımlar.</span>
-  </div>
-</footer>
-</div><!-- /catalogPage -->
-
-<!-- ═══ ÜRÜN DETAY SAYFASI ═══ -->
-<div id="detailPage" class="min-h-screen bg-surface">
-  <div class="pt-24 pb-20 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
-
-    <!-- Geri -->
-    <button onclick="showCatalog()" class="flex items-center gap-1 text-on-surface-variant hover:text-primary text-sm mb-10 transition-colors font-label uppercase tracking-widest">
-      <span class="material-symbols-outlined text-base">arrow_back</span> Kataloğa Dön
+<!-- DETAY SAYFASI -->
+<div id="detailPage">
+  <div class="detail-wrap">
+    <button class="d-back" onclick="showCatalog()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+      Koleksiyona Dön
     </button>
-
-    <div id="detailContent" class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-
-      <!-- Medya Tarafı -->
-      <div class="space-y-4">
-        <!-- Ana medya -->
-        <div class="main-media-wrap">
-          <img id="detailMainImg" src="" alt="" class="fade-in" style="display:block"/>
-          <iframe id="detailMainVideo" src="" allowfullscreen style="display:none;" class="fade-in"></iframe>
-          <!-- Navigasyon okları -->
-          <button id="mediaPrev" class="media-nav left-3" onclick="shiftMedia(-1)" style="display:none;">
-            <span class="material-symbols-outlined text-primary">chevron_left</span>
-          </button>
-          <button id="mediaNext" class="media-nav right-3" onclick="shiftMedia(1)" style="display:none;">
-            <span class="material-symbols-outlined text-primary">chevron_right</span>
-          </button>
+    <div class="d-grid">
+      <div class="d-media">
+        <div class="d-main" id="dMain">
+          <img id="dImg" src="" alt="" style="display:none"/>
+          <iframe id="dVid" src="" allowfullscreen style="display:none;width:100%;height:100%;border:none"></iframe>
+          <div id="dEmpty" class="d-main-empty">✦</div>
+          <button class="d-nav d-prev" id="dPrev" onclick="shiftDM(-1)" style="display:none">‹</button>
+          <button class="d-nav d-next" id="dNext" onclick="shiftDM(1)" style="display:none">›</button>
         </div>
-        <!-- Küçük resimler -->
-        <div id="thumbStrip" class="thumb-strip"></div>
+        <div class="d-thumbs" id="dThumbs"></div>
       </div>
-
-      <!-- Bilgi Tarafı -->
-      <div class="space-y-8 lg:pt-4">
-        <div>
-          <p id="detailKategori" class="font-label text-xs uppercase tracking-widest text-secondary mb-3"></p>
-          <h1 id="detailAd" class="font-headline text-4xl md:text-5xl font-extrabold tracking-tighter text-primary leading-tight"></h1>
-        </div>
-
-        <p id="detailAciklama" class="text-on-surface-variant text-base leading-relaxed"></p>
-
-        <!-- Özellikler -->
-        <div id="detailSpecs" class="space-y-3 border-t border-outline-variant/30 pt-6"></div>
-
-        <!-- WhatsApp CTA -->
-        <div class="space-y-3 pt-4">
-          <a id="detailWA" href="#" target="_blank" rel="noopener"
-            class="flex items-center justify-center gap-3 bg-primary text-on-primary px-8 py-5 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300 w-full">
-            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Bu Ürün Hakkında Bilgi Al
-          </a>
-        </div>
+      <div class="d-info">
+        <div class="d-cat" id="dCat"></div>
+        <h1 class="d-name" id="dName"></h1>
+        <p class="d-desc" id="dDesc"></p>
+        <div class="d-specs" id="dSpecs"></div>
+        <a class="d-wa" id="dWa" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Bu Ürün Hakkında Bilgi Al
+        </a>
+        <p class="d-wa-note">WhatsApp üzerinden hızlıca yanıt alın</p>
       </div>
     </div>
-
-    <!-- İlgili Ürünler -->
-    <div id="relatedWrap" class="mt-24" style="display:none;">
-      <h3 class="font-headline text-3xl font-extrabold tracking-tighter text-primary mb-10">Diğer Ürünler</h3>
-      <div id="relatedGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
-    </div>
+  </div>
+  <div class="related">
+    <h3 class="rel-title" id="relTitle" style="display:none">Diğer Ürünler</h3>
+    <div class="rel-grid" id="relGrid"></div>
   </div>
 </div>
 
 <script>
-// ─────────────────────────────────────
-// WHATSAPP
-// ─────────────────────────────────────
-const WA_ICON = `<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+let allP=[],filtP=[],activeCat='';
+const cSlider={};
+let dMedia=[],dIdx=0;
 
-function waUrl(text) {
-  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+// WA
+function wa(t){return`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(t)}`}
+function setWa(){
+  document.getElementById('navWa').href=wa('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
+  document.getElementById('heroCta').href=wa('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
+  document.getElementById('ctaWa').href=wa('Merhaba, özel sipariş hakkında bilgi almak istiyorum.');
 }
 
-function updateWhatsappLinks() {
-  document.getElementById('navWhatsapp').href = waUrl('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
-  document.getElementById('heroCta').href = waUrl('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
-  document.getElementById('ctaWhatsapp').href = waUrl('Merhaba, özel sipariş hakkında bilgi almak istiyorum.');
+// NAV
+function showCatalog(){
+  document.getElementById('catalogPage').style.display='block';
+  document.getElementById('detailPage').style.display='none';
+  window.scrollTo(0,0);
+  history.pushState({},'',window.location.pathname);
+}
+function showDetail(p){
+  document.getElementById('catalogPage').style.display='none';
+  document.getElementById('detailPage').style.display='block';
+  window.scrollTo(0,0);
+  renderDetail(p);
+  history.pushState({pid:p.id},'','?u='+p.id);
+}
+function go(id){setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})},120)}
+
+// FILTER
+function filterBy(btn){
+  activeCat=btn?btn.dataset.cat:'';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  filtP=activeCat?allP.filter(p=>p.kategori===activeCat):[...allP];
+  renderGrid();
+}
+function filterByName(cat){
+  activeCat=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>{
+    b.classList.toggle('active',(b.dataset.cat||'')===(cat||''));
+  });
+  filtP=cat?allP.filter(p=>p.kategori===cat):[...allP];
+  renderGrid();
 }
 
-// ─────────────────────────────────────
-// KATALOG / DETAY ROUTER
-// ─────────────────────────────────────
-let allProducts = [];
-let currentMediaList = []; // detay sayfasında aktif medya listesi
-let currentMediaIdx = 0;
+// LOAD
+window.addEventListener('DOMContentLoaded',()=>{
+  fetch(GAS_URL+'?action=getConfig').then(r=>r.json())
+    .then(c=>{if(c.whatsapp)WHATSAPP=c.whatsapp;setWa();}).catch(()=>setWa());
 
-function showCatalog() {
-  document.getElementById('catalogPage').style.display = 'block';
-  document.getElementById('detailPage').style.display = 'none';
-  window.scrollTo(0, 0);
-  history.pushState({}, '', window.location.pathname);
+  fetch(GAS_URL+'?action=getProducts').then(r=>r.json())
+    .then(d=>{
+      allP=d.products||[];filtP=[...allP];
+      updateCounts();renderGrid();
+      document.getElementById('heroCount').textContent=allP.length;
+      const pid=new URLSearchParams(window.location.search).get('u');
+      if(pid){const p=allP.find(x=>x.id===pid);if(p)showDetail(p);}
+    })
+    .catch(()=>{document.getElementById('skelGrid').style.display='none';document.getElementById('emptyState').style.display='block';});
+});
+
+function updateCounts(){
+  document.getElementById('cntAll').textContent='('+allP.length+')';
+  [['Sehpalar','cntSehpalar'],['Masalar','cntMasalar'],['Dekorasyon','cntDekorasyon'],
+   ['Mutfak','cntMutfak'],['Diğer','cntDiger']].forEach(([c,id])=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent='('+allP.filter(p=>p.kategori===c).length+')';
+  });
 }
 
-function showDetail(product) {
-  document.getElementById('catalogPage').style.display = 'none';
-  document.getElementById('detailPage').style.display = 'block';
-  window.scrollTo(0, 0);
+// RENDER GRID
+function renderGrid(){
+  document.getElementById('skelGrid').style.display='none';
+  const grid=document.getElementById('pgrid');
+  const empty=document.getElementById('emptyState');
+  document.getElementById('shopCount').textContent=filtP.length+' ürün';
+  if(!filtP.length){grid.style.display='none';empty.style.display='block';return;}
+  empty.style.display='none';grid.style.display='grid';
+  grid.innerHTML=filtP.map(p=>cardHTML(p)).join('');
+}
 
-  // Başlık & kategori
-  document.getElementById('detailAd').textContent = product.ad || '';
-  document.getElementById('detailKategori').textContent = product.kategori || '';
-  document.getElementById('detailAciklama').textContent = product.aciklama || '';
+function cardHTML(p){
+  const imgs=p.resimler||[];
+  const hasVid=!!p.video;
+  const total=imgs.length+(hasVid?1:0);
+  const idx=cSlider[p.id]||0;
+  const thumb=imgs[idx]||'';
+  const waLink=wa('Merhaba, '+p.ad+' hakkında bilgi almak istiyorum.');
+  const pd=sj(p);
+  return`<div class="pcard" id="pc-${p.id}">
+    <div class="card-media" onclick="openP(${pd})">
+      ${thumb?`<img src="${thumb}" alt="${p.ad}" loading="lazy"/>`:'<div class="card-empty">✦</div>'}
+      <div class="card-overlay"><div class="overlay-icon">→</div></div>
+      ${total>1?`<div class="media-badge">${total} medya</div>`:''}
+      ${hasVid?'<div class="video-badge">Video</div>':''}
+      ${imgs.length>1?`
+        <button class="card-nav prev" onclick="event.stopPropagation();cSlide('${p.id}',-1)">‹</button>
+        <button class="card-nav next" onclick="event.stopPropagation();cSlide('${p.id}',1)">›</button>
+        <div class="card-dots">${imgs.map((_,i)=>`<span class="cdot ${i===idx?'active':''}" onclick="event.stopPropagation();cSet('${p.id}',${i})"></span>`).join('')}</div>
+      `:''}
+      <a href="${waLink}" target="_blank" rel="noopener" class="card-wa" onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Bilgi Al
+      </a>
+    </div>
+    <div class="card-info">
+      ${p.kategori?`<div class="card-cat">${p.kategori}</div>`:''}
+      <div class="card-name">${p.ad}</div>
+      <div class="card-meta">${[p.boyut,p.malzeme].filter(Boolean).join(' · ')}</div>
+    </div>
+  </div>`;
+}
 
-  // Özellikler
-  const specs = document.getElementById('detailSpecs');
-  specs.innerHTML = '';
-  [['Boyut', product.boyut], ['Malzeme', product.malzeme]].forEach(([label, val]) => {
-    if (!val) return;
-    specs.innerHTML += `
-      <div class="flex justify-between items-center py-3 border-b border-outline-variant/20">
-        <span class="font-label text-xs uppercase tracking-widest text-on-surface-variant">${label}</span>
-        <span class="font-label text-sm text-primary font-semibold">${val}</span>
-      </div>`;
+function cSlide(pid,d){
+  const p=allP.find(x=>x.id===pid);if(!p)return;
+  const n=(p.resimler||[]).length;if(n<2)return;
+  cSlider[pid]=((cSlider[pid]||0)+d+n)%n;
+  const card=document.getElementById('pc-'+pid);if(!card)return;
+  const img=card.querySelector('.card-media img');
+  if(img)img.src=p.resimler[cSlider[pid]];
+  card.querySelectorAll('.cdot').forEach((d,i)=>d.classList.toggle('active',i===cSlider[pid]));
+}
+function cSet(pid,i){
+  const p=allP.find(x=>x.id===pid);if(!p)return;
+  cSlider[pid]=i;
+  const card=document.getElementById('pc-'+pid);if(!card)return;
+  const img=card.querySelector('.card-media img');
+  if(img)img.src=p.resimler[i];
+  card.querySelectorAll('.cdot').forEach((dd,ii)=>dd.classList.toggle('active',ii===i));
+}
+
+// DETAIL
+function openP(p){showDetail(p);}
+
+function renderDetail(p){
+  document.getElementById('dCat').textContent=p.kategori||'';
+  document.getElementById('dName').textContent=p.ad||'';
+  document.getElementById('dDesc').textContent=p.aciklama||'';
+
+  const specs=document.getElementById('dSpecs');
+  specs.innerHTML='';
+  [['Boyut',p.boyut],['Malzeme',p.malzeme],['Kategori',p.kategori]].forEach(([k,v])=>{
+    if(!v)return;
+    specs.innerHTML+=`<div class="d-spec"><span class="d-spec-lbl">${k}</span><span class="d-spec-val">${v}</span></div>`;
   });
 
-  // WhatsApp
-  document.getElementById('detailWA').href = waUrl(`Merhaba, ${product.ad} hakkında bilgi almak istiyorum.`);
+  document.getElementById('dWa').href=wa('Merhaba, '+p.ad+' hakkında bilgi almak istiyorum.');
 
-  // Medya listesi: resimler + video
-  currentMediaList = [];
-  (product.resimler || []).forEach(url => currentMediaList.push({ type: 'image', url }));
-  if (product.video) currentMediaList.push({ type: 'video', url: product.video });
+  dMedia=[];
+  (p.resimler||[]).forEach(u=>dMedia.push({type:'image',url:u}));
+  if(p.video)dMedia.push({type:'video',url:p.video});
+  dIdx=0;renderDM();
 
-  currentMediaIdx = 0;
-  renderDetailMedia();
-
-  // İlgili ürünler
-  const others = allProducts.filter(p => p.id !== product.id).slice(0, 4);
-  const relWrap = document.getElementById('relatedWrap');
-  if (others.length > 0) {
-    relWrap.style.display = 'block';
-    document.getElementById('relatedGrid').innerHTML = others.map(p => {
-      const thumb = (p.resimler && p.resimler.length > 0) ? p.resimler[0] : '';
-      return `
-        <div class="cursor-pointer group" onclick='showDetail(${JSON.stringify(p)})'>
-          <div class="aspect-[4/5] bg-surface-container rounded-lg overflow-hidden mb-3">
-            ${thumb ? `<img src="${thumb}" alt="${p.ad}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>` : '<div class="w-full h-full bg-surface-container"></div>'}
-          </div>
-          <h4 class="font-headline font-bold text-primary text-sm">${p.ad}</h4>
-          <p class="text-xs text-on-surface-variant mt-0.5">${[p.boyut, p.malzeme].filter(Boolean).join(' · ')}</p>
-        </div>`;
+  const others=allP.filter(x=>x.id!==p.id).slice(0,4);
+  const rt=document.getElementById('relTitle');
+  const rg=document.getElementById('relGrid');
+  if(others.length){
+    rt.style.display='block';
+    rg.innerHTML=others.map(o=>{
+      const th=(o.resimler&&o.resimler.length)?o.resimler[0]:'';
+      return`<div class="pcard" onclick="openP(${sj(o)})">
+        <div class="card-media" style="aspect-ratio:3/4">
+          ${th?`<img src="${th}" alt="${o.ad}" loading="lazy"/>`:'<div class="card-empty">✦</div>'}
+          <div class="card-overlay"><div class="overlay-icon">→</div></div>
+        </div>
+        <div class="card-info">${o.kategori?`<div class="card-cat">${o.kategori}</div>`:''}<div class="card-name" style="font-size:17px">${o.ad}</div></div>
+      </div>`;
     }).join('');
-  } else {
-    relWrap.style.display = 'none';
-  }
-
-  history.pushState({ productId: product.id }, '', '?urun=' + product.id);
+  }else{rt.style.display='none';rg.innerHTML='';}
 }
 
-// ─────────────────────────────────────
-// MEDYA GALERİ
-// ─────────────────────────────────────
-function renderDetailMedia() {
-  const mainImg = document.getElementById('detailMainImg');
-  const mainVideo = document.getElementById('detailMainVideo');
-  const prev = document.getElementById('mediaPrev');
-  const next = document.getElementById('mediaNext');
-
-  if (currentMediaList.length === 0) {
-    mainImg.src = '';
-    mainImg.style.display = 'block';
-    mainVideo.style.display = 'none';
-    prev.style.display = 'none';
-    next.style.display = 'none';
-    document.getElementById('thumbStrip').innerHTML = '';
-    return;
-  }
-
-  const m = currentMediaList[currentMediaIdx];
-  if (m.type === 'video') {
-    mainImg.style.display = 'none';
-    mainVideo.style.display = 'block';
-    mainVideo.src = m.url;
-    mainVideo.classList.add('fade-in');
-  } else {
-    mainVideo.style.display = 'none';
-    mainVideo.src = '';
-    mainImg.style.display = 'block';
-    mainImg.src = m.url;
-    mainImg.classList.remove('fade-in');
-    void mainImg.offsetWidth;
-    mainImg.classList.add('fade-in');
-  }
-
-  // Ok butonları
-  const show = currentMediaList.length > 1;
-  prev.style.display = show ? 'flex' : 'none';
-  next.style.display = show ? 'flex' : 'none';
-
-  // Küçük resimler
-  const strip = document.getElementById('thumbStrip');
-  strip.innerHTML = currentMediaList.map((media, i) => {
-    if (media.type === 'video') {
-      return `<div class="thumb-item is-video ${i === currentMediaIdx ? 'active' : ''}" onclick="setMedia(${i})">
-        <span class="material-symbols-outlined text-2xl text-on-surface-variant">play_circle</span>
-      </div>`;
+function renderDM(){
+  const img=document.getElementById('dImg');
+  const vid=document.getElementById('dVid');
+  const emp=document.getElementById('dEmpty');
+  const prev=document.getElementById('dPrev');
+  const next=document.getElementById('dNext');
+  img.style.display='none';vid.style.display='none';emp.style.display='none';
+  if(!dMedia.length){emp.style.display='flex';}
+  else{
+    const m=dMedia[dIdx];
+    if(m.type==='video'){vid.src=m.url;vid.style.display='block';}
+    else{
+      img.src=m.url;img.style.display='block';
+      img.classList.remove('fi');void img.offsetWidth;img.classList.add('fi');
     }
-    return `<div class="thumb-item ${i === currentMediaIdx ? 'active' : ''}" onclick="setMedia(${i})">
-      <img src="${media.url}" alt=""/>
-    </div>`;
+  }
+  const multi=dMedia.length>1;
+  prev.style.display=multi?'flex':'none';
+  next.style.display=multi?'flex':'none';
+
+  const strip=document.getElementById('dThumbs');
+  strip.innerHTML=dMedia.map((m,i)=>{
+    if(m.type==='video')return`<div class="d-thumb ${i===dIdx?'active':''}" onclick="setDM(${i})"><div class="d-thumb-vid">▶</div></div>`;
+    return`<div class="d-thumb ${i===dIdx?'active':''}" onclick="setDM(${i})"><img src="${m.url}" alt=""/></div>`;
   }).join('');
 }
+function setDM(i){dIdx=i;renderDM();}
+function shiftDM(d){dIdx=(dIdx+d+dMedia.length)%dMedia.length;renderDM();}
 
-function setMedia(idx) {
-  currentMediaIdx = idx;
-  renderDetailMedia();
-}
-
-function shiftMedia(dir) {
-  currentMediaIdx = (currentMediaIdx + dir + currentMediaList.length) % currentMediaList.length;
-  renderDetailMedia();
-}
-
-// ─────────────────────────────────────
-// KATALOG RENDER
-// ─────────────────────────────────────
-function renderProducts(products) {
-  document.getElementById('skeletonGrid').style.display = 'none';
-
-  if (products.length === 0) {
-    document.getElementById('emptyState').style.display = 'block';
-    return;
-  }
-
-  const grid = document.getElementById('productGrid');
-  grid.style.display = 'grid';
-
-  const offsets = ['', 'md:mt-12', '', 'lg:-mt-12', '', 'md:mt-12 lg:mt-0'];
-
-  grid.innerHTML = products.map((p, i) => {
-    const offset = offsets[i % offsets.length];
-    const thumb = (p.resimler && p.resimler.length > 0) ? p.resimler[0] : '';
-    const mediaCount = (p.resimler ? p.resimler.length : 0) + (p.video ? 1 : 0);
-    const waLink = waUrl(`Merhaba, ${p.ad} hakkında bilgi almak istiyorum.`);
-
-    return `
-      <div class="product-card group cursor-pointer ${offset}" onclick='openProduct(${JSON.stringify(p)})'>
-        <div class="aspect-[4/5] bg-surface-container overflow-hidden mb-6 rounded-lg relative">
-          ${thumb
-            ? `<img src="${thumb}" alt="${p.ad}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy"/>`
-            : '<div class="w-full h-full bg-surface-container"></div>'}
-          ${mediaCount > 1 ? `<div class="absolute bottom-3 right-3 bg-black/40 text-white text-[10px] font-label px-2 py-1 rounded flex items-center gap-1"><span class="material-symbols-outlined" style="font-size:12px">photo_library</span>${mediaCount}</div>` : ''}
-        </div>
-        <div class="flex justify-between items-start">
-          <div>
-            <h3 class="font-headline text-xl font-bold text-primary">${p.ad}</h3>
-            <p class="font-label text-sm text-on-surface-variant mt-1">${[p.boyut, p.malzeme].filter(Boolean).join(' · ') || ''}</p>
-          </div>
-          <a href="${waLink}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
-            class="wa-link flex items-center gap-1.5 text-xs font-semibold text-secondary hover:text-on-secondary-fixed-variant transition-colors mt-1">
-            ${WA_ICON} Bilgi Al
-          </a>
-        </div>
-        ${p.aciklama ? `<p class="text-on-surface-variant text-sm mt-3 leading-relaxed max-w-sm line-clamp-2">${p.aciklama}</p>` : ''}
-      </div>`;
-  }).join('');
-}
-
-function openProduct(product) {
-  showDetail(product);
-}
-
-// ─────────────────────────────────────
-// YÜKLEME
-// ─────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  // WhatsApp config
-  fetch(GAS_URL + '?action=getConfig')
-    .then(r => r.json())
-    .then(cfg => { if (cfg.whatsapp) WHATSAPP = cfg.whatsapp; updateWhatsappLinks(); })
-    .catch(() => updateWhatsappLinks());
-
-  // Ürünler
-  fetch(GAS_URL + '?action=getProducts')
-    .then(r => r.json())
-    .then(data => {
-      allProducts = data.products || [];
-      renderProducts(allProducts);
-
-      // URL'de ?urun=ID varsa detay sayfasını aç
-      const urlParams = new URLSearchParams(window.location.search);
-      const pid = urlParams.get('urun');
-      if (pid) {
-        const p = allProducts.find(x => x.id === pid);
-        if (p) showDetail(p);
-      }
-    })
-    .catch(() => {
-      document.getElementById('skeletonGrid').style.display = 'none';
-      document.getElementById('emptyState').style.display = 'block';
-    });
-});
-
-// Tarayıcı geri tuşu
-window.addEventListener('popstate', () => {
-  const params = new URLSearchParams(window.location.search);
-  const pid = params.get('urun');
-  if (pid) {
-    const p = allProducts.find(x => x.id === pid);
-    if (p) { showDetail(p); return; }
-  }
+function sj(o){return JSON.stringify(o).replace(/'/g,"&#39;");}
+window.addEventListener('popstate',()=>{
+  const pid=new URLSearchParams(window.location.search).get('u');
+  if(pid){const p=allP.find(x=>x.id===pid);if(p){showDetail(p);return;}}
   showCatalog();
 });
-
-function scrollTo(selector) {
-  const el = document.querySelector(selector);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
 </script>
 </body>
 </html>
