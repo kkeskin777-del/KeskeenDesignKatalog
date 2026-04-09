@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KESKEEN — Yönetim Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-surface": "#1a1c1c",
+          "on-primary": "#ffffff",
+          "primary-container": "#202a38",
+          "secondary": "#7f5440",
+          "surface-container-lowest": "#ffffff",
+          "primary": "#0b1623",
+          "secondary-fixed-dim": "#f2baa1",
+          "on-primary-container": "#8791a2",
+          "surface-variant": "#e2e2e2",
+          "on-secondary": "#ffffff",
+          "surface-container-high": "#e8e8e8",
+          "surface-container": "#eeeeee",
+          "surface-container-low": "#f3f3f3",
+          "surface": "#f9f9f9",
+          "outline": "#75777c",
+          "outline-variant": "#c5c6cc",
+          "on-surface-variant": "#44474c",
+          "error": "#ba1a1a",
+          "error-container": "#ffdad6",
+          "secondary-container": "#fec5ac",
+          "on-secondary-container": "#79503c"
+        },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] }
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .tonal-transition { transition: background-color 0.3s ease; }
+  /* Drag handle */
+  .drag-handle { cursor: grab; }
+  .drag-handle:active { cursor: grabbing; }
+  /* Loading overlay */
+  .loading-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(249,249,249,0.8); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #e2e2e2; border-top-color: #0b1623;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  /* Image preview */
+  .img-preview { max-height: 200px; object-fit: contain; }
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+    padding: 14px 24px; font-size: 14px; font-weight: 500;
+    color: white; border-radius: 4px;
+    animation: slideUp 0.3s ease;
+  }
+  .toast-success { background: #0b1623; }
+  .toast-error { background: #ba1a1a; }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary/30">
+
+<!-- ⚙️ BU URL'Yİ DEĞİŞTİRİN — GAS Web App URL'niz -->
+<script>
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbzauh8tMMDfbpVSXDqqI4DbhS6poEDgL3Guz0rXawOyQkCDE_-flknVkT4aXN2CCwGGXw/exec';
+</script>
+
+<!-- ═══ LOADING ═══ -->
+<div id="loading" class="loading-overlay" style="display:none;">
+  <div class="spinner"></div>
+</div>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center px-6">
+  <div class="w-full max-w-sm space-y-8">
+    <div class="text-center">
+      <h1 class="font-headline text-3xl font-extrabold tracking-tighter text-primary">KESKEEN</h1>
+      <p class="text-on-surface-variant text-sm mt-2">Yönetim Paneli</p>
+    </div>
+    <div class="bg-surface-container-lowest p-8 space-y-6">
+      <div>
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Şifre</label>
+        <input id="passwordInput" type="password" placeholder="Şifrenizi girin"
+          class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors"
+          onkeydown="if(event.key==='Enter')login()"/>
+      </div>
+      <button onclick="login()" class="w-full bg-primary text-on-primary py-4 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300">
+        Giriş Yap
+      </button>
+      <p id="loginError" class="text-error text-xs text-center" style="display:none;">Yanlış şifre</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN PANEL ═══ -->
+<div id="adminPanel" style="display:none;">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl flex justify-between items-center px-6 md:px-8 py-5 max-w-full tonal-transition">
+    <div class="text-xl font-bold tracking-tighter text-slate-900 font-headline">KESKEEN <span class="text-on-surface-variant font-normal text-sm">/ Yönetim</span></div>
+    <div class="flex items-center gap-4">
+      <a href="index.html" target="_blank" class="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors uppercase tracking-widest">Kataloğu Gör</a>
+      <button onclick="logout()" class="text-xs font-semibold text-error hover:text-error/80 transition-colors uppercase tracking-widest">Çıkış</button>
+    </div>
+  </nav>
+
+  <main class="pt-24 pb-16 px-6 md:px-8 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+      <div>
+        <p class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Ürün Yönetimi</p>
+        <h2 class="font-headline text-4xl font-extrabold tracking-tighter text-primary mt-1">Ürünlerim</h2>
+      </div>
+      <button onclick="showAddForm()" class="bg-primary text-on-primary px-8 py-3 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300 flex items-center gap-2 self-start">
+        <span class="material-symbols-outlined text-lg">add</span>
+        Yeni Ürün Ekle
+      </button>
+    </div>
+
+    <!-- Product List -->
+    <div id="productList" class="space-y-4">
+      <!-- JS ile doldurulacak -->
+    </div>
+
+    <div id="emptyState" class="text-center py-20" style="display:none;">
+      <span class="material-symbols-outlined text-6xl text-outline-variant">inventory_2</span>
+      <p class="text-on-surface-variant mt-4">Henüz ürün eklenmemiş.</p>
+      <button onclick="showAddForm()" class="mt-6 bg-primary text-on-primary px-8 py-3 font-label uppercase tracking-widest text-xs">İlk Ürünü Ekle</button>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ ÜRÜN FORMU (Modal) ═══ -->
+<div id="productModal" class="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4" style="display:none;">
+  <div class="absolute inset-0 bg-primary/30 backdrop-blur-sm" onclick="closeModal()"></div>
+  <div class="relative bg-surface-container-lowest w-full max-w-2xl max-h-[80vh] overflow-y-auto p-8 md:p-10 space-y-6 z-10">
+    
+    <div class="flex justify-between items-center">
+      <h3 id="modalTitle" class="font-headline text-2xl font-bold tracking-tight text-primary">Yeni Ürün</h3>
+      <button onclick="closeModal()" class="text-on-surface-variant hover:text-primary">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Resim Yükleme -->
+    <div>
+      <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-3">Ürün Fotoğrafı</label>
+      <div id="imageUploadArea" onclick="document.getElementById('imageInput').click()" 
+        class="border-2 border-dashed border-outline-variant hover:border-secondary rounded-lg p-8 text-center cursor-pointer transition-colors bg-surface-container-low">
+        <div id="imagePreviewContainer" style="display:none;" class="flex justify-center">
+          <img id="imagePreview" class="img-preview rounded" alt="Önizleme"/>
+        </div>
+        <div id="imagePlaceholder">
+          <span class="material-symbols-outlined text-4xl text-outline-variant">add_photo_alternate</span>
+          <p class="text-on-surface-variant text-sm mt-2">Fotoğraf yüklemek için tıklayın</p>
+          <p class="text-outline text-xs mt-1">JPG, PNG — Maks. 5MB</p>
+        </div>
+      </div>
+      <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect(event)" class="hidden"/>
+      <input type="hidden" id="imageUrl"/>
+    </div>
+
+    <!-- Ürün Bilgileri -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="md:col-span-2">
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Ürün Adı *</label>
+        <input id="inputAd" type="text" placeholder="ör: Ceviz Masa"
+          class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors"/>
+      </div>
+      <div class="md:col-span-2">
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Açıklama</label>
+        <textarea id="inputAciklama" rows="3" placeholder="Ürün hakkında kısa açıklama..."
+          class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors resize-none"></textarea>
+      </div>
+      <div>
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Boyut</label>
+        <input id="inputBoyut" type="text" placeholder="ör: 120 × 60 × 75 cm"
+          class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors"/>
+      </div>
+      <div>
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Malzeme</label>
+        <input id="inputMalzeme" type="text" placeholder="ör: Masif Ceviz"
+          class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors"/>
+      </div>
+      <div>
+        <label class="font-label text-xs uppercase tracking-widest text-on-surface-variant block mb-2">Kategori</label>
+        <select id="inputKategori" class="w-full bg-transparent border-b-2 border-outline-variant focus:border-primary py-3 text-sm outline-none transition-colors">
+          <option value="">Seçin...</option>
+          <option value="Masalar">Masalar</option>
+          <option value="Aksesuarlar">Aksesuarlar</option>
+          <option value="Mutfak">Mutfak</option>
+          <option value="Dekorasyon">Dekorasyon</option>
+          <option value="Diğer">Diğer</option>
+        </select>
+      </div>
+      <div class="flex items-end pb-3">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input id="inputAktif" type="checkbox" checked class="w-5 h-5 accent-primary"/>
+          <span class="font-label text-sm text-on-surface">Katalogda görünsün</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Kaydet Butonu -->
+    <input type="hidden" id="editingId" value=""/>
+    <div class="flex gap-4 pt-4">
+      <button onclick="saveProduct()" class="flex-1 bg-primary text-on-primary py-4 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300">
+        Kaydet
+      </button>
+      <button onclick="closeModal()" class="px-8 py-4 font-label uppercase tracking-widest text-xs text-on-surface-variant hover:text-primary border border-outline-variant/30 transition-colors">
+        İptal
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SİL ONAY (Modal) ═══ -->
+<div id="deleteModal" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display:none;">
+  <div class="absolute inset-0 bg-primary/30 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+  <div class="relative bg-surface-container-lowest w-full max-w-md p-8 space-y-6 z-10 text-center">
+    <span class="material-symbols-outlined text-4xl text-error">warning</span>
+    <h3 class="font-headline text-xl font-bold text-primary">Ürünü Sil</h3>
+    <p class="text-on-surface-variant text-sm">Bu ürünü ve fotoğrafını kalıcı olarak silmek istediğinize emin misiniz?</p>
+    <div class="flex gap-4">
+      <button onclick="confirmDelete()" class="flex-1 bg-error text-on-error py-3 font-label uppercase tracking-widest text-xs">Evet, Sil</button>
+      <button onclick="closeDeleteModal()" class="flex-1 py-3 font-label uppercase tracking-widest text-xs text-on-surface-variant border border-outline-variant/30">İptal</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────
+// STATE
+// ─────────────────────────────────────
+let products = [];
+let pendingDeleteId = null;
+let pendingImageBase64 = null;
+let pendingImageName = null;
+
+// ─────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────
+function login() {
+  const pw = document.getElementById('passwordInput').value;
+  showLoading(true);
+
+  fetch(GAS_URL + '?action=checkPassword&pw=' + encodeURIComponent(pw))
+    .then(r => r.json())
+    .then(data => {
+      showLoading(false);
+      if (data.ok) {
+        sessionStorage.setItem('kp', pw);
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadProducts();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    })
+    .catch(err => {
+      showLoading(false);
+      toast('Bağlantı hatası: ' + err.message, 'error');
+    });
+}
+
+function logout() {
+  sessionStorage.removeItem('kp');
+  location.reload();
+}
+
+function getPassword() {
+  return sessionStorage.getItem('kp') || '';
+}
+
+// Auto-login
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('kp');
+  if (saved) {
+    document.getElementById('passwordInput').value = saved;
+    login();
+  }
+});
+
+// ─────────────────────────────────────
+// PRODUCTS
+// ─────────────────────────────────────
+function loadProducts() {
+  showLoading(true);
+  // Admin tüm ürünleri görmeli — getAllProducts GAS'ta ayrı fonksiyon
+  // Ama doGet sadece aktif ürünleri döner, o yüzden POST ile çekelim
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'getAll', password: getPassword() })
+  })
+  .then(r => r.json())
+  .then(data => {
+    showLoading(false);
+    // Fallback: eğer getAll desteklenmiyorsa normal GET kullan
+    if (data.error) {
+      return fetch(GAS_URL + '?action=getProducts').then(r => r.json());
+    }
+    return data;
+  })
+  .then(data => {
+    showLoading(false);
+    products = data.products || [];
+    renderProducts();
+  })
+  .catch(err => {
+    showLoading(false);
+    // Fallback GET
+    fetch(GAS_URL + '?action=getProducts')
+      .then(r => r.json())
+      .then(data => {
+        products = data.products || [];
+        renderProducts();
+      })
+      .catch(e => toast('Yükleme hatası', 'error'));
+  });
+}
+
+function renderProducts() {
+  const list = document.getElementById('productList');
+  const empty = document.getElementById('emptyState');
+
+  if (products.length === 0) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  list.innerHTML = products.map(p => `
+    <div class="bg-surface-container-lowest flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-4 md:p-6 group tonal-transition hover:bg-surface-container-low">
+      <!-- Resim -->
+      <div class="w-full md:w-24 h-40 md:h-24 bg-surface-container rounded overflow-hidden flex-shrink-0">
+        ${p.resimUrl 
+          ? `<img src="${p.resimUrl}" alt="${p.ad}" class="w-full h-full object-cover"/>` 
+          : '<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-2xl text-outline-variant">image</span></div>'}
+      </div>
+      <!-- Bilgi -->
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <h4 class="font-headline text-lg font-bold text-primary truncate">${p.ad}</h4>
+          ${p.aktif === true || p.aktif === 'TRUE' || p.aktif === 'true'
+            ? '<span class="text-[10px] font-bold uppercase tracking-widest bg-primary text-on-primary px-2 py-0.5 rounded">Aktif</span>'
+            : '<span class="text-[10px] font-bold uppercase tracking-widest bg-surface-container-high text-outline px-2 py-0.5 rounded">Pasif</span>'}
+        </div>
+        <p class="text-on-surface-variant text-sm mt-1 truncate">${p.aciklama || '—'}</p>
+        <div class="flex gap-4 mt-1 text-xs text-outline">
+          ${p.boyut ? `<span>${p.boyut}</span>` : ''}
+          ${p.malzeme ? `<span>• ${p.malzeme}</span>` : ''}
+          ${p.kategori ? `<span>• ${p.kategori}</span>` : ''}
+        </div>
+      </div>
+      <!-- Aksiyonlar -->
+      <div class="flex gap-2 flex-shrink-0">
+        <button onclick="editProduct('${p.id}')" class="p-2 text-on-surface-variant hover:text-primary transition-colors" title="Düzenle">
+          <span class="material-symbols-outlined text-xl">edit</span>
+        </button>
+        <button onclick="showDeleteModal('${p.id}')" class="p-2 text-on-surface-variant hover:text-error transition-colors" title="Sil">
+          <span class="material-symbols-outlined text-xl">delete</span>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────
+// ADD / EDIT FORM
+// ─────────────────────────────────────
+function showAddForm() {
+  document.getElementById('editingId').value = '';
+  document.getElementById('modalTitle').textContent = 'Yeni Ürün';
+  document.getElementById('inputAd').value = '';
+  document.getElementById('inputAciklama').value = '';
+  document.getElementById('inputBoyut').value = '';
+  document.getElementById('inputMalzeme').value = '';
+  document.getElementById('inputKategori').value = '';
+  document.getElementById('inputAktif').checked = true;
+  document.getElementById('imageUrl').value = '';
+  document.getElementById('imagePreviewContainer').style.display = 'none';
+  document.getElementById('imagePlaceholder').style.display = 'block';
+  pendingImageBase64 = null;
+  pendingImageName = null;
+  document.getElementById('productModal').style.display = 'flex';
+}
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+
+  document.getElementById('editingId').value = id;
+  document.getElementById('modalTitle').textContent = 'Ürünü Düzenle';
+  document.getElementById('inputAd').value = p.ad || '';
+  document.getElementById('inputAciklama').value = p.aciklama || '';
+  document.getElementById('inputBoyut').value = p.boyut || '';
+  document.getElementById('inputMalzeme').value = p.malzeme || '';
+  document.getElementById('inputKategori').value = p.kategori || '';
+  document.getElementById('inputAktif').checked = (p.aktif === true || p.aktif === 'TRUE' || p.aktif === 'true');
+  document.getElementById('imageUrl').value = p.resimUrl || '';
+  pendingImageBase64 = null;
+  pendingImageName = null;
+
+  if (p.resimUrl) {
+    document.getElementById('imagePreview').src = p.resimUrl;
+    document.getElementById('imagePreviewContainer').style.display = 'flex';
+    document.getElementById('imagePlaceholder').style.display = 'none';
+  } else {
+    document.getElementById('imagePreviewContainer').style.display = 'none';
+    document.getElementById('imagePlaceholder').style.display = 'block';
+  }
+
+  document.getElementById('productModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('productModal').style.display = 'none';
+}
+
+// ─────────────────────────────────────
+// IMAGE HANDLING
+// ─────────────────────────────────────
+function handleImageSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    toast('Dosya 5MB\'dan büyük olamaz', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pendingImageBase64 = e.target.result;
+    pendingImageName = file.name;
+    document.getElementById('imagePreview').src = e.target.result;
+    document.getElementById('imagePreviewContainer').style.display = 'flex';
+    document.getElementById('imagePlaceholder').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadImageToGAS(base64, fileName) {
+  const resp = await fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'uploadImage',
+      password: getPassword(),
+      imageData: base64,
+      fileName: fileName
+    })
+  });
+  return await resp.json();
+}
+
+// ─────────────────────────────────────
+// SAVE
+// ─────────────────────────────────────
+async function saveProduct() {
+  const ad = document.getElementById('inputAd').value.trim();
+  if (!ad) {
+    toast('Ürün adı zorunlu', 'error');
+    return;
+  }
+
+  showLoading(true);
+
+  try {
+    let resimUrl = document.getElementById('imageUrl').value;
+
+    // Yeni resim seçildiyse önce yükle
+    if (pendingImageBase64) {
+      const imgResult = await uploadImageToGAS(pendingImageBase64, pendingImageName);
+      if (imgResult.error) {
+        showLoading(false);
+        toast('Resim yükleme hatası: ' + imgResult.error, 'error');
+        return;
+      }
+      resimUrl = imgResult.url;
+    }
+
+    const product = {
+      ad: ad,
+      aciklama: document.getElementById('inputAciklama').value.trim(),
+      boyut: document.getElementById('inputBoyut').value.trim(),
+      malzeme: document.getElementById('inputMalzeme').value.trim(),
+      kategori: document.getElementById('inputKategori').value,
+      resimUrl: resimUrl,
+      aktif: document.getElementById('inputAktif').checked
+    };
+
+    const editingId = document.getElementById('editingId').value;
+    let action;
+
+    if (editingId) {
+      product.id = editingId;
+      action = 'updateProduct';
+    } else {
+      action = 'addProduct';
+    }
+
+    const resp = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: action,
+        password: getPassword(),
+        product: product,
+        id: editingId
+      })
+    });
+
+    const result = await resp.json();
+    showLoading(false);
+
+    if (result.error) {
+      toast('Hata: ' + result.error, 'error');
+      return;
+    }
+
+    toast(editingId ? 'Ürün güncellendi' : 'Ürün eklendi', 'success');
+    closeModal();
+    loadProducts();
+
+  } catch (err) {
+    showLoading(false);
+    toast('Kaydetme hatası: ' + err.message, 'error');
+  }
+}
+
+// ─────────────────────────────────────
+// DELETE
+// ─────────────────────────────────────
+function showDeleteModal(id) {
+  pendingDeleteId = id;
+  document.getElementById('deleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+  pendingDeleteId = null;
+  document.getElementById('deleteModal').style.display = 'none';
+}
+
+async function confirmDelete() {
+  if (!pendingDeleteId) return;
+  showLoading(true);
+  closeDeleteModal();
+
+  try {
+    const resp = await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'deleteProduct',
+        password: getPassword(),
+        id: pendingDeleteId
+      })
+    });
+
+    const result = await resp.json();
+    showLoading(false);
+
+    if (result.error) {
+      toast('Silme hatası: ' + result.error, 'error');
+      return;
+    }
+
+    toast('Ürün silindi', 'success');
+    loadProducts();
+
+  } catch (err) {
+    showLoading(false);
+    toast('Silme hatası: ' + err.message, 'error');
+  }
+}
+
+// ─────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────
+function showLoading(show) {
+  document.getElementById('loading').style.display = show ? 'flex' : 'none';
+}
+
+function toast(msg, type) {
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+</script>
+
+</body></html>

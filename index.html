@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KESKEEN | El Yapımı Ahşap Tasarımlar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "tertiary-fixed": "#ffdbcc", "on-surface": "#1a1c1c", "on-primary": "#ffffff",
+          "surface-bright": "#f9f9f9", "on-tertiary-fixed": "#2d1509", "inverse-surface": "#2f3131",
+          "inverse-primary": "#bdc7d9", "on-tertiary-fixed-variant": "#5f3f30",
+          "primary-container": "#202a38", "on-error": "#ffffff", "on-error-container": "#93000a",
+          "secondary": "#7f5440", "primary-fixed": "#d9e3f6", "surface-container-lowest": "#ffffff",
+          "primary": "#0b1623", "on-primary-fixed-variant": "#3d4756", "secondary-fixed": "#ffdbcc",
+          "primary-fixed-dim": "#bdc7d9", "secondary-fixed-dim": "#f2baa1",
+          "on-primary-fixed": "#121c2a", "tertiary-container": "#3e2316",
+          "inverse-on-surface": "#f1f1f1", "on-primary-container": "#8791a2",
+          "on-tertiary-container": "#b18876", "surface-variant": "#e2e2e2",
+          "on-secondary": "#ffffff", "on-secondary-fixed": "#301305",
+          "on-secondary-fixed-variant": "#643d2a", "tertiary": "#260f04",
+          "tertiary-fixed-dim": "#eabda9", "surface-container-high": "#e8e8e8",
+          "surface-tint": "#555f6f", "on-background": "#1a1c1c", "background": "#f9f9f9",
+          "surface-container-highest": "#e2e2e2", "error": "#ba1a1a",
+          "surface-container": "#eeeeee", "surface-container-low": "#f3f3f3",
+          "surface-dim": "#dadada", "secondary-container": "#fec5ac",
+          "on-secondary-container": "#79503c", "surface": "#f9f9f9", "on-tertiary": "#ffffff",
+          "outline": "#75777c", "outline-variant": "#c5c6cc", "on-surface-variant": "#44474c",
+          "error-container": "#ffdad6"
+        },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] }
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .no-line { border: none !important; }
+  .tonal-transition { transition: background-color 0.3s ease; }
+  .product-card .wa-link { opacity: 0; transition: opacity 0.3s ease; }
+  .product-card:hover .wa-link { opacity: 1; }
+  @media (max-width: 767px) { .product-card .wa-link { opacity: 1; } }
+  /* Skeleton loading */
+  .skeleton { background: linear-gradient(90deg, #eeeeee 25%, #e2e2e2 50%, #eeeeee 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary/30">
+
+<!-- ⚙️ BU URL'Yİ DEĞİŞTİRİN — GAS Web App URL'niz -->
+<script>
+  const GAS_URL = 'BURAYA_GAS_URL_YAZIN';
+  let WHATSAPP = '905XXXXXXXXX';
+</script>
+
+<!-- ═══ NAV ═══ -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl flex justify-between items-center px-8 py-6 max-w-full no-line tonal-transition">
+  <div class="text-2xl font-bold tracking-tighter text-slate-900 font-headline">KESKEEN</div>
+  <div class="hidden md:flex items-center space-x-12">
+    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300" href="#katalog">Katalog</a>
+    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300" href="#hikaye">Hikâye</a>
+    <a class="font-headline tracking-tight text-slate-500 hover:text-slate-900 transition-colors duration-300" href="#iletisim">İletişim</a>
+  </div>
+  <div class="flex items-center space-x-6 text-slate-900">
+    <a id="navWhatsapp" href="#" target="_blank" rel="noopener" class="hover:scale-95 transition-transform duration-200">
+      <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <button class="md:hidden" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="hidden fixed top-[72px] left-0 right-0 z-40 bg-white/95 backdrop-blur-xl px-8 py-6 space-y-4 md:hidden">
+  <a class="block font-headline tracking-tight text-slate-900 text-lg" href="#katalog" onclick="this.parentElement.classList.add('hidden')">Katalog</a>
+  <a class="block font-headline tracking-tight text-slate-900 text-lg" href="#hikaye" onclick="this.parentElement.classList.add('hidden')">Hikâye</a>
+  <a class="block font-headline tracking-tight text-slate-900 text-lg" href="#iletisim" onclick="this.parentElement.classList.add('hidden')">İletişim</a>
+</div>
+
+<main>
+
+<!-- ═══ HERO ═══ -->
+<section class="relative h-screen flex items-center pt-20 overflow-hidden bg-surface">
+  <div class="absolute inset-0 z-0 flex items-center justify-end">
+    <div class="w-full md:w-3/4 h-[90%] bg-surface-container-highest relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-surface via-surface/40 to-transparent"></div>
+    </div>
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto px-8 w-full">
+    <p class="font-label text-xs uppercase tracking-[0.2em] text-secondary mb-6">El Yapımı Ahşap Tasarımlar</p>
+    <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter text-primary leading-[0.95]">Doğanın<br/>Zarafeti.</h1>
+    <p class="text-on-surface-variant text-lg mt-8 max-w-md leading-relaxed font-light">Seçkin sert ağaçlardan geleneksel ustalıkla şekillenen, zamansız tasarımlar.</p>
+    <div class="flex items-center gap-6 mt-12">
+      <a href="#katalog" class="bg-primary text-on-primary px-10 py-4 font-label uppercase tracking-widest text-xs hover:bg-primary-container transition-colors duration-300">Kataloğu Gör</a>
+      <a id="heroCta" href="#" target="_blank" rel="noopener" class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors border-b border-on-surface-variant pb-1">Bize Yazın</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCTS ═══ -->
+<section id="katalog" class="pt-16 md:pt-24 pb-24 md:pb-32 px-8 lg:px-16 max-w-[1600px] mx-auto">
+  <header class="mb-16 md:mb-24 text-center md:text-left">
+    <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-4">Tüm Ürünler</p>
+    <h2 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-primary">Katalog</h2>
+  </header>
+
+  <!-- Skeleton Loading -->
+  <div id="skeletonGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+    <div><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
+    <div class="md:mt-12"><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
+    <div><div class="aspect-[4/5] skeleton rounded-lg mb-6"></div><div class="skeleton h-5 w-3/4 rounded mb-2"></div><div class="skeleton h-4 w-1/2 rounded"></div></div>
+  </div>
+
+  <!-- Actual Product Grid -->
+  <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16" style="display:none;">
+    <!-- JS ile doldurulacak -->
+  </div>
+
+  <!-- Empty State -->
+  <div id="emptyState" class="text-center py-20" style="display:none;">
+    <span class="material-symbols-outlined text-6xl text-outline-variant">inventory_2</span>
+    <p class="text-on-surface-variant mt-4">Katalog yakında güncellenecek.</p>
+  </div>
+</section>
+
+<!-- ═══ ETHOS ═══ -->
+<section id="hikaye" class="bg-surface-container-low py-24 md:py-32">
+  <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center gap-20">
+    <div class="flex-1 space-y-8">
+      <h2 class="text-4xl md:text-5xl font-headline font-extrabold text-primary leading-tight tracking-tighter">Her Dokunuşta<br/>Bir Hikâye.</h2>
+      <p class="text-lg text-on-surface-variant leading-relaxed">Atölyemizde her parça, sürdürülebilir kaynaklardan temin edilen masif ağaçlarla el işçiliğiyle üretilir. Geleneksel birleştirme teknikleri ve doğal yağ finişi ile ömür boyu dayanıklılık.</p>
+      <ul class="space-y-4">
+        <li class="flex items-center gap-4 text-primary font-semibold">
+          <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Masif Ceviz &amp; Meşe
+        </li>
+        <li class="flex items-center gap-4 text-primary font-semibold">
+          <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Geleneksel Birleştirme Teknikleri
+        </li>
+        <li class="flex items-center gap-4 text-primary font-semibold">
+          <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>Doğal Yağ Finişi
+        </li>
+      </ul>
+    </div>
+    <div class="flex-1 grid grid-cols-2 gap-4">
+      <div class="space-y-4">
+        <div class="bg-surface-container h-64 rounded-lg"></div>
+        <div class="bg-surface-container-high h-48 rounded-lg"></div>
+      </div>
+      <div class="pt-12 space-y-4">
+        <div class="bg-surface-container-high h-48 rounded-lg"></div>
+        <div class="bg-surface-container h-64 rounded-lg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section id="iletisim" class="bg-primary text-white py-20 md:py-28 px-8 text-center space-y-8">
+  <span class="material-symbols-outlined text-4xl text-secondary-fixed-dim" style="font-variation-settings: 'FILL' 1;">architecture</span>
+  <h3 class="font-headline text-3xl md:text-4xl font-extrabold tracking-tighter leading-tight max-w-lg mx-auto">Özel tasarım mı istiyorsunuz?<br/>Birlikte çalışalım.</h3>
+  <p class="text-on-primary-container max-w-xs mx-auto text-sm leading-relaxed">Ölçü, malzeme ve tasarım tercihinizi paylaşın.</p>
+  <div class="pt-4">
+    <a id="ctaWhatsapp" href="#" target="_blank" rel="noopener" class="inline-block bg-white text-primary px-10 py-4 font-label uppercase tracking-widest text-xs hover:bg-surface-container-low transition-colors duration-300">Bize Yazın</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="w-full bg-slate-100 tonal-transition">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 max-w-7xl mx-auto font-headline text-sm">
+    <div class="space-y-6">
+      <div class="text-xl font-bold tracking-tighter text-slate-900">KESKEEN</div>
+      <p class="text-slate-500 max-w-xs leading-relaxed">El Yapımı Ahşap Tasarımlar.<br/>Doğanın zarafeti, usta ellerde.</p>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Katalog</span>
+      <a class="text-slate-500 hover:text-slate-900 transition-opacity opacity-80 hover:opacity-100" href="#katalog">Tüm Ürünler</a>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Bilgi</span>
+      <a class="text-slate-500 hover:text-slate-900 transition-opacity opacity-80 hover:opacity-100" href="#hikaye">Hakkımda</a>
+      <a class="text-slate-500 hover:text-slate-900 transition-opacity opacity-80 hover:opacity-100" href="#iletisim">İletişim</a>
+    </div>
+    <div class="flex flex-col space-y-4">
+      <span class="font-bold text-primary uppercase tracking-widest text-[10px]">Sosyal</span>
+      <a class="text-slate-500 hover:text-slate-900 transition-opacity opacity-80 hover:opacity-100" href="#">Instagram</a>
+      <a class="text-slate-500 hover:text-slate-900 transition-opacity opacity-80 hover:opacity-100" href="#">Etsy</a>
+    </div>
+  </div>
+  <div class="border-t border-slate-200 px-12 py-8 max-w-7xl mx-auto text-slate-400 text-[10px] uppercase tracking-widest">
+    <span>© 2026 KESKEEN. El Yapımı Ahşap Tasarımlar.</span>
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────
+// WhatsApp SVG (reusable)
+// ─────────────────────────────────────
+const WA_ICON = `<svg viewBox="0 0 24 24" class="w-4 h-4 fill-current"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+function waUrl(text) {
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+}
+
+// ─────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Config yükle (WhatsApp numarası)
+  fetch(GAS_URL + '?action=getConfig')
+    .then(r => r.json())
+    .then(cfg => {
+      if (cfg.whatsapp) WHATSAPP = cfg.whatsapp;
+      updateWhatsappLinks();
+    })
+    .catch(() => updateWhatsappLinks());
+
+  // Ürünleri yükle
+  fetch(GAS_URL + '?action=getProducts')
+    .then(r => r.json())
+    .then(data => {
+      const products = data.products || [];
+      renderProducts(products);
+    })
+    .catch(err => {
+      document.getElementById('skeletonGrid').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'block';
+    });
+});
+
+function updateWhatsappLinks() {
+  document.getElementById('navWhatsapp').href = waUrl('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
+  document.getElementById('heroCta').href = waUrl('Merhaba, ürünleriniz hakkında bilgi almak istiyorum.');
+  document.getElementById('ctaWhatsapp').href = waUrl('Merhaba, özel sipariş hakkında bilgi almak istiyorum.');
+}
+
+// ─────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────
+function renderProducts(products) {
+  document.getElementById('skeletonGrid').style.display = 'none';
+
+  if (products.length === 0) {
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+
+  const grid = document.getElementById('productGrid');
+  grid.style.display = 'grid';
+
+  // Staggered offset pattern (1code tarzı)
+  const offsets = ['', 'md:mt-12', '', 'lg:-mt-12', '', 'md:mt-12 lg:mt-0'];
+
+  grid.innerHTML = products.map((p, i) => {
+    const offset = offsets[i % offsets.length];
+    const waLink = waUrl(`Merhaba, ${p.ad} hakkında bilgi almak istiyorum.`);
+
+    return `
+      <div class="product-card group cursor-pointer ${offset}">
+        <div class="aspect-[4/5] bg-surface-container overflow-hidden mb-6 rounded-lg">
+          ${p.resimUrl
+            ? `<img src="${p.resimUrl}" alt="${p.ad}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy"/>`
+            : '<div class="w-full h-full bg-surface-container"></div>'}
+        </div>
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="font-headline text-xl font-bold text-primary">${p.ad}</h3>
+            <p class="font-label text-sm text-on-surface-variant mt-1">${[p.boyut, p.malzeme].filter(Boolean).join(' · ') || ''}</p>
+          </div>
+          <a href="${waLink}" target="_blank" rel="noopener"
+            class="wa-link flex items-center gap-1.5 text-xs font-semibold text-secondary hover:text-on-secondary-fixed-variant transition-colors mt-1">
+            ${WA_ICON} Bilgi Al
+          </a>
+        </div>
+        ${p.aciklama ? `<p class="text-on-surface-variant text-sm mt-3 leading-relaxed max-w-sm">${p.aciklama}</p>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+</script>
+
+</body></html>
